@@ -1,0 +1,57 @@
+package IDEKO;
+
+workflow IDEKO_main {
+  define task ReadData;
+
+
+  // Task CONNECTIONS
+  // START -> ReadData -> PrepareData -> TrainModel -> EvaluateModel -> END;
+START -> ReadData -> END;
+  configure task ReadData {
+    implementation "IDEKO-task-library.ReadData";
+    dependency "tasks/IDEKO/Binary_v1/src/**";
+  }
+
+
+
+
+  // DATA
+  define input data ExternalDataFile;
+
+  // DATA CONNECTIONS
+  ExternalDataFile --> ReadData.ExternalDataFile;
+
+  configure data ExternalDataFile {
+    //path "IDEKO1";
+    //path "datasets/v1/ideko-subset/**";
+    path "projects/marily-IDEKO-1724848998/datasets/**";
+  }
+}
+
+workflow TrainModelNN from IDEKO_main {
+  
+}
+
+
+
+experiment EXP {
+  intent FindBestClassifier;
+  control {
+    //Automated
+    S1 -> E1;
+  }
+
+  space S1 of TrainModelNN {
+    strategy gridsearch;
+    param epochs_vp = enum(2);
+    param batch_size_vp = enum(64);
+    
+  }
+
+
+   event E1 {
+            type automated;
+            condition "the accuracy of the 5 lastly trained ML models is > 50%";
+            task check_accuracy_over_workflows_of_last_space; 
+   } 
+}
