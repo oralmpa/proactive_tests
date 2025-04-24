@@ -19,30 +19,30 @@ def get_file(zenoh_key, local_path):
             if reply.ok:
                 with open(local_path, "wb") as f:
                     f.write(reply.ok.payload)
-                print(f"✅ File downloaded from Zenoh to {local_path}")
+                print(f"File downloaded from Zenoh to {local_path}")
                 return True
-        print(f"❌ File not found in Zenoh: {zenoh_key}")
+        print(f"File not found in Zenoh: {zenoh_key}")
         return False
     except Exception as e:
-        print(f"❌ Failed to download file: {e}")
+        print(f"Failed to download file: {e}")
         return False
 
 
 def main():
     if len(sys.argv) < 3:
-        print("❌ Usage: python zenoh_get_file.py <zenoh_key> <local_path>")
+        print("Usage: python zenoh_get_file.py <zenoh_key> <local_path>")
         sys.exit(1)
 
     zenoh_key = sys.argv[1]
     local_path = sys.argv[2]
 
-    print(f"📦 Fetching file from Zenoh key: {zenoh_key}")
+    print(f"Fetching file from Zenoh key: {zenoh_key}")
     success = get_file(zenoh_key, local_path)
 
     if success:
-        print(f"✅ File successfully written to: {local_path}")
+        print(f"File successfully written to: {local_path}")
     else:
-        print(f"❌ Failed to fetch {zenoh_key}")
+        print(f"Failed to fetch {zenoh_key}")
 
 
 if __name__ == '__main__':
