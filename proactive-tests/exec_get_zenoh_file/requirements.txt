@@ -1,2 +1,2 @@
 eclipse-zenoh==0.11.0
-maturin>=0.13,<0.15
+maturin==0.14.17
